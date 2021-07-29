@@ -1,0 +1,7 @@
+#cloud-config
+hostname: pearl_demo
+password: i_do_not_know
+packages:
+  - htop
+  - tree
+ 
