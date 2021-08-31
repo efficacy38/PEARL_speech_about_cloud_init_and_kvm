@@ -20,7 +20,7 @@ users:
     sudo: False
     lock_passwd: False
     shell: /bin/bash
-    plain_text_passwd: '{{ gen_id(uid) }}'
+    plain_text_passwd: test
 {% endfor %}
 
 write_files:
