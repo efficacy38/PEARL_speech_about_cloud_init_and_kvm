@@ -7,6 +7,9 @@ can use this shell to boot a virtual machine with qemu, and need to input the ge
 ### <span>genseed.sh</span>
 can use this shell to generate the seed file aka configure driver(in openstack)
 
+### <span>transform.sh</span>
+give some reminder to transform virtual hard disk driver (qcow2 -> vmdk)
+
 ## demos
 which contain some examples, demostrate the cloud init's feature, and some application.]
 ### files in demo
