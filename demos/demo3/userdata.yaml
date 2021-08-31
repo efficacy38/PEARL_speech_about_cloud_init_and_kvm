@@ -1,0 +1,14 @@
+#cloud-config
+users:
+  - default
+  - name: efficacy38
+    gecos: not_care 
+    primary_group: efficacy38
+    groups: sudo
+    sudo: true 
+    lock_passwd: False
+    shell: /bin/bash
+    plain_text_passwd: 'test' 
+ssh_pwauth: true    # this is essential to enable password login
+chpasswd: false
+

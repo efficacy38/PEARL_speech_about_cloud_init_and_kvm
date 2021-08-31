@@ -1,4 +1,4 @@
-# PEARL_speech_about_cloud_init_and_kvm
+# cloud-init_demos
 
 ## utils
 ### <span>boot.sh</span>

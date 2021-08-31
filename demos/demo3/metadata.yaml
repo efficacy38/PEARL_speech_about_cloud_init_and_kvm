@@ -1,0 +1,9 @@
+instance-id: just-my-instanceid01
+local-hostname: test1
+local-hostname: fallback-cloudimg
+local-hostname: maas-server
+local-hostname: juju-controller
+local-hostname: node-1
+local-hostname: node-2
+local-hostname: node-3
+local-hostname: node-4
