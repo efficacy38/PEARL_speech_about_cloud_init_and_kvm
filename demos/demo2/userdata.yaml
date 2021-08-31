@@ -1,0 +1,59 @@
+## template: jinja
+#cloud-config
+groups:
+  - docker
+
+{% set id_prefix = 's1083210' %}
+{% set id_backfixs = range(10,20) %}
+
+{% macro gen_id(id_backfix) -%}
+{{ id_prefix ~ id_backfix }}
+{%- endmacro %}
+
+users:
+  - default
+{% for backfix in id_backfixs %}
+  - name: {{ gen_id(backfix) }}
+    gecos: {{ gen_id(backfix) }}
+    primary_group: {{ gen_id(backfix) }}
+    groups: [ students, test_user, docker ]
+    sudo: False
+    lock_passwd: False
+    shell: /bin/bash
+    plain_text_passwd: 'test' 
+{% endfor %}
+ssh_pwauth: True    # this is essential to enable password login
+
+write_files:
+- content: not_accessable.
+  path: /etc/skel/public_html/index.html
+- content: |
+      [homes]
+      comment = Home Directories
+      browseable = no
+      #read only = yes
+      writable = yes
+  path: /etc/samba/smb.d/user_home.conf
+
+apt:
+  sources:
+    source1:
+      source: deb [arch=amd64] https://download.docker.com/linux/ubuntu $RELEASE stable
+      keyid: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+      # keyserver: https://download.docker.com/linux/ubuntu/gpg
+
+packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - samba
+  - apache2
+
+runcmd:
+  - "ls /etc/samba/smb.d/* | sed -e 's/^/include = /' >> /etc/samba/smb.conf"
+  - ["service", "smbd", "restart"]
+{% for back_fix in id_backfixs %}
+  - "printf '{{ gen_id(back_fix) }}\n{{ gen_id(back_fix) }}\n' |smbpasswd -a -s {{ gen_id(back_fix) }}"
+{% endfor %}
+  - ["a2enmod", "userdir"]
+  - ["service", "apache2", "restart"]
