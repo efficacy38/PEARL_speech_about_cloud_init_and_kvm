@@ -13,6 +13,7 @@ fi
 
 if [ ! -e "$SEED" ]; then
 	echo "seed does not exist. Run genseed.sh"
+    exit 1
 fi
 
 echo "set the image name which qemu will write into(please add filename extemsion like *.img), notice it will overwrite the file at that directory"

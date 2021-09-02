@@ -3,7 +3,19 @@
 IMG="focal-server-cloudimg-amd64.img"
 TARGET_IMG="fallback-cloudimg"
 SEED="seed.img"
+CORE=2
+MEMORY=4096
 
+function promptAndGetVal() {
+    prompt=$1
+    local -n argRef=$2
+    unset input
+    echo $prompt
+    read input
+    if [[ $input != "" ]]; then
+        argRef=$input
+    fi
+}
 
 if [ ! -e "../../isos/$IMG" ]; then
     echo "Img not exist."
@@ -15,17 +27,20 @@ if [ ! -e "$SEED" ]; then
     echo "seed does not exist. Run genseed.sh"
 fi
 
-echo "set the image name which qemu will write into(please not add filename extemsion like *.img), notice it will overwrite the file at that directory"
-read TMP_TARGET_IMG
-if [[ $TMP_TARGET_IMG != "" ]]; then
-    TARGET_IMG=$TMP_TARGET_IMG
-fi
+promptAndGetVal "set the image name which qemu will write into(please not add filename extemsion like *.img), notice it will overwrite the file at that directory" TARGET_IMG
+promptAndGetVal "set the vcpus default is 2" CORE
+promptAndGetVal "set the memory default is 4096(G)" MEMORY
+echo "local-hostname: $TARGET_IMG" >> metadata.yaml
+./genseed.sh
 
 cp "../../isos/$IMG" "../../isos/$TARGET_IMG.img"
 
+echo "$TARGET_IMG|$CORE|$MEMORY"
+
 virt-install \
   --name $TARGET_IMG \
-  --memory 2048 \
+  --memory $MEMORY \
+  --vcpus $CORE \
   --disk "../../isos/$TARGET_IMG.img",device=disk,bus=virtio \
   --disk $SEED,device=cdrom \
   --os-type linux \
