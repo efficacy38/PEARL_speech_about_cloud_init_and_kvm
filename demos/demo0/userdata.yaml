@@ -1,0 +1,19 @@
+#!/bin/bash
+useradd -m jerry
+usermod -aG sudo
+printf "password\npassword\n" | passwd jerry
+
+# write a file at /a_cat
+cat << EOF > /a_cat
+cat is so cute
+don't u want to touch it?
+EOF
+
+# cloud init run this script as super_user,
+# just change the owner
+chown jerry:jerry /a_cat
+
+cat << EOF > /su_dog
+cat is own by super user
+EOF
+
