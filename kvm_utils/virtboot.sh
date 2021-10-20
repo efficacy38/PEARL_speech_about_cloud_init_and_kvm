@@ -37,6 +37,10 @@ cp "../../isos/$IMG" "../../isos/$TARGET_IMG.img"
 
 echo "$TARGET_IMG|$CORE|$MEMORY"
 
+# if using falback, just delete the virsh record about old vm
+virsh destroy $TARGET_IMG
+virsh undefine $TARGET_IMG
+
 virt-install \
   --name $TARGET_IMG \
   --memory $MEMORY \
