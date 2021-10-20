@@ -30,7 +30,12 @@ fi
 promptAndGetVal "set the image name which qemu will write into(please not add filename extemsion like *.img), notice it will overwrite the file at that directory" TARGET_IMG
 promptAndGetVal "set the vcpus default is 2" CORE
 promptAndGetVal "set the memory default is 4096(G)" MEMORY
+
+grep "local-hostname: $TARGET_IMG" metadata.yaml
+if [[ $? != 0 ]]; then
 echo "local-hostname: $TARGET_IMG" >> metadata.yaml
+fi 
+
 ./genseed.sh
 
 cp "../../isos/$IMG" "../../isos/$TARGET_IMG.img"
